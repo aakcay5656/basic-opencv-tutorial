@@ -18,7 +18,7 @@ This Python application checks whether a given template matches the live video s
 
 3. Specify the Template:
 
-    - Replace `Your İmage` with the file name of the template you want to use.
+    - Replace `Your picture` with the file name of the template you want to use.
 
 4. Run the Code:
 
@@ -56,7 +56,7 @@ Bu Python uygulaması, bilgisayar kamerasından canlı video akışını alarak 
 
 3. Şablonu Belirtin:
 
-    - `Your İmage` kısmını, kullanmak istediğiniz şablonun dosya adıyla değiştirin.
+    - `Your picture` kısmını, kullanmak istediğiniz şablonun dosya adıyla değiştirin.
 
 4. Kodu Çalıştırın:
 
