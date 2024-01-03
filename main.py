@@ -8,7 +8,7 @@ def main():
     camera = cv2.VideoCapture(0)
 
 
-    template_path = "Your İmage"
+    template_path = "Your picture"
     template = cv2.imread(template_path)
 
     if template is None:
@@ -38,7 +38,7 @@ def main():
 
         loc = cv2.minMaxLoc(result)[3]
         if result[loc[1], loc[0]] > threshold:
-            print("Eşleşme Bulundu!")
+            print("Match Found!")
             cv2.putText(frame, 'Match', loc, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
 
