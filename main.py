@@ -1,47 +1,57 @@
-import threading
+
 
 import cv2
-from deepface import DeepFace
-
-cap = cv2.VideoCapture(0)
-
-cap.set(cv2.CAP_PROP_FRAME_WIDTH,640)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
-
-counter = 0
-
-face_match = False
-
-reference_img = cv2.imread("Your İmage")
-
-def check_face(frame):
-    global face_match
-    try:
-        if DeepFace.verify(frame,reference_img.copy())['verified']:
-            face_match = True
-        else:
-            face_match = False
-    except ValueError:
-        face_match = False
 
 
-while True:
-    ret,frame = cap.read()
+def main():
 
-    if ret:
-        if counter % 30 ==0:
-            try:
-                threading.Thread(target=check_face,args=(frame.copy(),)).start()
-            except ValueError:
-                pass
-        counter +=1
+    camera = cv2.VideoCapture(0)
 
-        if face_match:
-            cv2.putText(frame,"MATCH!",(20,450),cv2.FONT_HERSHEY_SIMPLEX,2,(0,255,0),3)
-        else:
-            cv2.putText(frame, "NO MATCH!", (20, 450), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
-        cv2.imshow("video",frame)
-    key = cv2.waitKey(1)
-    if key == ord("q"):
-        break
-cv2.destroyAllWindows()
+
+    template_path = "Your İmage"
+    template = cv2.imread(template_path)
+
+    if template is None:
+        print(f"Error: Template not found at {template_path}")
+        return
+
+
+    template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+
+    while True:
+
+        ret, frame = camera.read()
+
+        if not ret:
+            print("Error: Unable to capture frame")
+            break
+
+
+        frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+
+        result = cv2.matchTemplate(frame_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+
+
+        threshold = 0.8
+
+
+        loc = cv2.minMaxLoc(result)[3]
+        if result[loc[1], loc[0]] > threshold:
+            print("Eşleşme Bulundu!")
+            cv2.putText(frame, 'Match', loc, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+
+        cv2.imshow('Frame', frame)
+
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+
+    camera.release()
+    cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    main()
